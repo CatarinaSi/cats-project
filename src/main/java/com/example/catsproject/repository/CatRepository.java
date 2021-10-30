@@ -12,6 +12,4 @@ import java.util.List;
 public interface CatRepository extends JpaRepository <Cat,Long> {
 
     List<Cat> findByBreed(CatBreed valueOf);
-
-    Cat saveAll();
 }

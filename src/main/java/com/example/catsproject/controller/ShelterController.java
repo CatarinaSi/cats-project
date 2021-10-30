@@ -1,5 +1,6 @@
 package com.example.catsproject.controller;
 
+import com.example.catsproject.controller.response.ShelterReturnResponse;
 import com.example.catsproject.model.CatShelter;
 import com.example.catsproject.controller.request.ShelterRequest;
 import com.example.catsproject.service.ShelterService;
@@ -19,8 +20,8 @@ public class ShelterController {
     }
 
     //Create a shelter
-    @PostMapping(value = "/shelter", consumes = "application/json")
-    public CatShelter createShelter(@RequestBody @Valid ShelterRequest shelterRequest) {
+    @PostMapping("/shelter")
+    public ShelterReturnResponse createShelter(@RequestBody @Valid ShelterRequest shelterRequest) {
 
         CatShelter newCatShelter = CatShelter
                 .builder()
@@ -29,19 +30,13 @@ public class ShelterController {
                 .volunteers(shelterRequest.getVolunteers())
                 .build();
 
-        return shelterService.createShelter(newCatShelter);
+        final CatShelter shelter = shelterService.createShelter(newCatShelter);
+        return new ShelterReturnResponse(shelter.getId(),shelter.getName(),shelter.getLocation(),shelter.getVolunteers());
     }
 
     //Delete by ID
-    @DeleteMapping(value = "/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteCatShelter(@PathVariable(value = "id") Long catShelterId) {
         shelterService.deleteById(catShelterId);
     }
-
-    //Read all the volunteers
-    @GetMapping("/shelter/{id}")
-    public List<CatShelter> ShelterList() {
-        return shelterService.findAll();
-    }
 }
-

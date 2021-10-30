@@ -5,9 +5,9 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class ShelterRequest {
+    private Long Id;
     private String name;
     private String location;
     private int volunteers;

@@ -1,7 +1,8 @@
 package com.example.catsproject.service;
 
 
-import com.example.catsproject.exception.CatException;
+import com.example.catsproject.controller.request.CatRequest;
+import com.example.catsproject.exception.CatNotFound;
 import com.example.catsproject.model.Cat;
 import com.example.catsproject.model.CatBreed;
 import com.example.catsproject.repository.CatRepository;
@@ -25,7 +26,6 @@ public class CatService {
     }
 
     public List<Cat> findAll() {
-
         return catRepository.findAll();
     }
 
@@ -33,29 +33,24 @@ public class CatService {
         return catRepository.save(newcat);
     }
 
-   // Checks if an Cat exists in the database
-    private boolean CheckIfCatIsOnShelter(Cat cat) {
+    // Checks if an Cat exists in the database
+    private boolean checkIfCatIsOnShelter(Cat cat) {
         if (cat.getId() == null) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Cat not found in the shelter.");
         }
         return this.catRepository.existsById(cat.getId());
     }
-//
-//    public Cat findById(String id) {
-//        return catRepository.findById(id).get();
-//  }
-
     public List<Cat> findByBreed(String breed) {
         return catRepository.findByBreed((CatBreed.valueOf(breed)));
     }
-
-    public Cat updateCat(String id, String name, int age, CatBreed catBreed) {
-        return catRepository.saveAll();
+    public Cat updateCat(Cat newcat, String id) {
+       Cat cat = this.updateCat(newcat,id);
+        cat.setName(newcat.getName());
+        cat.setAge(newcat.getAge());
+        cat.setBreed(newcat.getBreed());
+        return catRepository.save(cat);
     }
-
-
-
 }
 
 
